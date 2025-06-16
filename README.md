@@ -19,7 +19,7 @@ Este é um aplicativo de desktop simples para gerenciamento de tarefas com um si
 ## 💻 Como Usar
 
 1.  **Baixe o Executável:**
-    * Vá para a seção [Releases]([https://github.com/andreaves448/Gerenciador-Pomodoro/releases](https://github.com/andrenaves448/Gerenciador-Pomodoro/tree/main)  e baixe a versão mais recente do `app.exe`
+    * Vá para a seção [Releases]([https://github.com/andrenaves448/Gerenciador-Pomodoro/tree/main](https://github.com/andrenaves448/Gerenciador-Pomodoro/tree/main/dist))  e baixe a versão mais recente do `app.exe`
 2.  **Execute o Aplicativo:**
     * Após o download, simplesmente clique duas vezes no arquivo `app.exe`.
 3.  **Adicionar Tarefas:**
