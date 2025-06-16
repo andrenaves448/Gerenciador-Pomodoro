@@ -1,6 +1,7 @@
 # Gerenciador de Tarefas Pomodoro
 
-![Pomodoro App Screenshot](https://via.placeholder.com/600x400?text=Adicione+aqui+um+screenshot+do+seu+app)
+![The_Pomodoro_timer_in_Vivaldi_browser](https://github.com/user-attachments/assets/ce2ef63d-a203-4222-89e0-1c40ad0ff47a)
+
 
 Este é um aplicativo de desktop simples para gerenciamento de tarefas com um sistema Pomodoro integrado, desenvolvido em Python usando a biblioteca PyQt5 para a interface gráfica.
 
