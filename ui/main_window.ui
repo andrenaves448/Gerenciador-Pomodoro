@@ -6,117 +6,182 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1131</width>
+    <height>767</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Gerenciador Pomodoro</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background-color: #333333; /* Cor de fundo */
+    color: #FFFFFF; /* Opcional: para o texto ficar branco e visível */
+}
+/* Você pode estilizar outros elementos se quiser um tema escuro */
+QLabel {
+    color: #FFFFFF; /* Texto dos labels brancos */
+}
+QLineEdit {
+    background-color: #444444; /* Campo de texto mais escuro */
+    color: #FFFFFF;
+}
+QListWidget {
+    background-color: #444444; /* Fundo da lista */
+    color: #FFFFFF;
+}
+QPushButton {
+    background-color: #555555; /* Botões mais escuros */
+    color: #FFFFFF;
+    border: 1px solid #777777; /* Borda sutil */
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>70</y>
-      <width>591</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QLabel" name="lbl_timer">
-         <property name="font">
-          <font>
-           <family>Segoe UI</family>
-           <pointsize>72</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>25:00</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_start_pause">
-         <property name="text">
-          <string>iniciar</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_reset">
-         <property name="text">
-          <string>Resetar</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_skip">
-         <property name="text">
-          <string>Pular</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLineEdit" name="txt_new_task">
-           <property name="placeholderText">
-            <string>Digite uma nova tarefa aqui....</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btn_add_task">
-           <property name="text">
-            <string>Adicionar Tarefa</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QListWidget" name="list_tasks"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QPushButton" name="btn_complete_task">
-           <property name="text">
-            <string>Marcar Concluída</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btn_remove_task">
-           <property name="text">
-            <string>Remover Tarefa</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QLabel" name="lbl_header_title">
+      <property name="font">
+       <font>
+        <pointsize>24</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel#lbl_header_title { /* O #lbl_header_title é para aplicar o estilo apenas a este QLabel específico */
+    border: 2px solid #55aaff; /* Borda de 2px, sólida, cor azul clara */
+    border-radius: 10px; /* Bordas arredondadas (opcional) */
+    padding: 5px; /* Espaçamento interno entre o texto e a borda */
+    background-color: #444444; /* Cor de fundo para o label, para destacá-lo (opcional) */
+    color: #FFFFFF; /* Cor do texto (se o fundo for escuro) */
+    /* Outras propriedades de fonte, alinhamento, etc., podem ser definidas aqui ou nas propriedades normais */
+    font-size: 24pt; /* Exemplo: tamanho da fonte. 'pt' é pontos */
+    font-weight: bold; /* Exemplo: texto em negrito */
+    qproperty-alignment: AlignCenter; /* Exemplo: alinhamento central. Note que aqui é 'qproperty-alignment' */
+}</string>
+      </property>
+      <property name="text">
+       <string>Gerenciador de Produtividade</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="lbl_timer">
+          <property name="font">
+           <font>
+            <family>Digital-7</family>
+            <pointsize>72</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QLabel#lbl_timer {
+    background-color: #333333; /* Fundo bem escuro, quase preto */
+    color: #00FF00; /* Cor verde brilhante (ou use #00FFFF para ciano, #FF0000 para vermelho) */
+    border: 2px solid #00AA00; /* Borda verde um pouco mais escura */
+    border-radius: 10px; /* Cantos arredondados */
+    padding: 15px; /* Espaçamento interno generoso */
+
+    /* Fontes que parecem digitais (ou genéricas que funcionam bem) */
+    font-family: &quot;Digital-7&quot;, &quot;Consolas&quot;, &quot;Monospace&quot;; /* Tente Digital-7 se instalada, senão Consolas ou Monospace */
+    font-size: 72pt; /* Tamanho da fonte, pode ajustar */
+    font-weight: bold; /* Negrito */
+
+    qproperty-alignment: AlignCenter; /* Garante que o texto esteja centralizado */
+}</string>
+          </property>
+          <property name="text">
+           <string>25:00</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_start_pause">
+          <property name="text">
+           <string>iniciar</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_reset">
+          <property name="text">
+           <string>Resetar</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_skip">
+          <property name="text">
+           <string>Pular</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLineEdit" name="txt_new_task">
+            <property name="placeholderText">
+             <string>Digite uma nova tarefa aqui....</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_add_task">
+            <property name="text">
+             <string>Adicionar Tarefa</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QListWidget" name="list_tasks"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="btn_complete_task">
+            <property name="text">
+             <string>Marcar Concluída</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_remove_task">
+            <property name="text">
+             <string>Remover Tarefa</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1131</width>
      <height>22</height>
     </rect>
    </property>

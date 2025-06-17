@@ -1,6 +1,12 @@
+import os
 import sys
+import json # Garante que 'json' está importado no topo
+
+# Adicionado 'QStandardPaths' para lidar com caminhos de dados do aplicativo
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QListWidgetItem
-from PyQt5.QtCore import QTimer, QTime, Qt
+from PyQt5.QtCore import QTimer, QTime, Qt, QStandardPaths # QStandardPaths adicionado aqui
+from PyQt5.QtGui import QIcon
+
 from ui_main_window import Ui_MainWindow # Importa a classe da interface gerada
 
 class PomodoroApp(QMainWindow):
@@ -10,6 +16,27 @@ class PomodoroApp(QMainWindow):
         # Configura a UI a partir do arquivo gerado pelo Qt Designer
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        # Define o título da janela (se não definido no Qt Designer)
+        self.setWindowTitle("Gerenciador Pomodoro")
+
+        # --- CÓDIGO MELHORADO PARA DEFINIR O ÍCONE DA JANELA ---
+        if getattr(sys, 'frozen', False):
+            # Se o aplicativo está empacotado (frozen=True)
+            application_path = os.path.dirname(sys.path[0]) # sys.path[0] é mais confiável em --onefile
+        else:
+            # Se o aplicativo está sendo rodado como script Python
+            application_path = os.path.dirname(os.path.abspath(__file__))
+
+        # Constrói o caminho completo para o ícone
+        icon_path = os.path.join(application_path, "assets", "pomodoro_icon.png")
+        
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
+            # print(f"Ícone definido de: {icon_path}") # Linha de debug, pode remover depois
+        # else:
+            # print(f"AVISO: Arquivo de ícone NÃO encontrado em: {icon_path}") # Linha de debug, pode remover depois
+        # -------------------------------------------------------------------
 
         # --- Configurações do Pomodoro ---
         self.pomodoro_duration = 25 * 60 # 25 minutos em segundos
@@ -35,8 +62,29 @@ class PomodoroApp(QMainWindow):
         self.ui.btn_complete_task.clicked.connect(self.complete_task)
         self.ui.btn_remove_task.clicked.connect(self.remove_task)
 
-        # --- Lógica de Salvamento e Carregamento de Dados (Futuro) ---
+        # --- Lógica de Salvamento e Carregamento de Dados ---
         self.load_tasks()
+
+
+    # --- Função auxiliar para obter o caminho de dados ---
+    def get_data_path(self):
+        """
+        Retorna o caminho completo para o arquivo tasks.json
+        na pasta de dados do aplicativo (AppData/Roaming no Windows).
+        """
+        # Obter o caminho padrão para dados de aplicativo específicos do usuário
+        # Ex: C:\Users\<Username>\AppData\Roaming\<AppName>
+        app_data_root = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+
+        # Criar uma subpasta específica para o seu aplicativo, se não existir
+        app_name_folder = "Gerenciador Pomodoro" # Nome da pasta para seus dados
+        full_data_dir = os.path.join(app_data_root, app_name_folder)
+
+        # Criar o diretório completo se ele não existir
+        os.makedirs(full_data_dir, exist_ok=True) # 'exist_ok=True' evita erro se a pasta já existe
+
+        # Retornar o caminho completo para o arquivo tasks.json
+        return os.path.join(full_data_dir, "tasks.json")
 
 
     # --- Funções do Timer (métodos) ---
@@ -66,7 +114,7 @@ class PomodoroApp(QMainWindow):
             self.timer.stop()
             self.is_running = False
             self.ui.btn_start_pause.setText("Iniciar")
-            self.play_sound_notification() # Precisaremos implementar isso
+            self.play_sound_notification()
 
             if self.is_pomodoro:
                 self.pomodoro_count += 1
@@ -114,8 +162,7 @@ class PomodoroApp(QMainWindow):
 
     def play_sound_notification(self):
         """Toca um som para notificar o fim de uma fase."""
-        # Implementaremos isso depois, pois requer uma biblioteca externa
-        # Por enquanto, podemos usar um print ou deixar vazio.
+
         print("Som de notificação!")
 
 
@@ -124,7 +171,10 @@ class PomodoroApp(QMainWindow):
         """Adiciona uma nova tarefa à lista."""
         task_text = self.ui.txt_new_task.text().strip()
         if task_text:
-            self.ui.list_tasks.addItem(task_text)
+            item = QListWidgetItem(task_text)
+            item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
+            item.setCheckState(Qt.Unchecked)
+            self.ui.list_tasks.addItem(item)
             self.ui.txt_new_task.clear() # Limpa o campo de entrada
             self.save_tasks() # Salva as tarefas após adicionar
 
@@ -155,7 +205,6 @@ class PomodoroApp(QMainWindow):
     # --- Lógica de Persistência de Dados (Salvamento/Carregamento) ---
     def save_tasks(self):
         """Salva as tarefas e seus estados em um arquivo JSON."""
-        import json
         tasks = []
         for i in range(self.ui.list_tasks.count()):
             item = self.ui.list_tasks.item(i)
@@ -163,16 +212,23 @@ class PomodoroApp(QMainWindow):
                 "text": item.text(),
                 "completed": item.checkState() == Qt.Checked
             })
-        with open("tasks.json", "w", encoding="utf-8") as f:
-            json.dump(tasks, f, indent=4)
-        print("Tarefas salvas.")
+
+        file_path = self.get_data_path() # Obtém o caminho correto
+        try:
+            with open(file_path, "w", encoding="utf-8") as f:
+                json.dump(tasks, f, indent=4)
+            print(f"Tarefas salvas em: {file_path}") # Mensagem de debug no console
+        except Exception as e:
+            # Mostra uma mensagem de erro crítica para o usuário
+            QMessageBox.critical(self, "Erro de Salvamento", f"Não foi possível salvar as tarefas:\n{e}\nVerifique permissões ou espaço em disco.")
+            print(f"ERRO ao salvar tarefas em {file_path}: {e}") # Mensagem de debug no console
 
 
     def load_tasks(self):
         """Carrega as tarefas de um arquivo JSON."""
-        import json
+        file_path = self.get_data_path() # Obtém o caminho correto
         try:
-            with open("tasks.json", "r", encoding="utf-8") as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 tasks = json.load(f)
             for task_data in tasks:
                 item = QListWidgetItem(task_data["text"])
@@ -182,11 +238,16 @@ class PomodoroApp(QMainWindow):
                 else:
                     item.setCheckState(Qt.Unchecked)
                 self.ui.list_tasks.addItem(item)
-            print("Tarefas carregadas.")
+            print(f"Tarefas carregadas de: {file_path}") # Mensagem de debug no console
         except FileNotFoundError:
             print("Arquivo tasks.json não encontrado. Iniciando com lista vazia.")
-        except json.JSONDecodeError:
-            print("Erro ao decodificar tasks.json. Arquivo pode estar corrompido.")
+            # Este é um erro esperado na primeira vez que o app é executado
+        except json.JSONDecodeError as e:
+            QMessageBox.warning(self, "Aviso de Dados", f"O arquivo de tarefas está corrompido e não pôde ser carregado. Erro: {e}")
+            print(f"ERRO ao decodificar tasks.json: {e}. Arquivo pode estar corrompido.")
+        except Exception as e: # Captura outros erros inesperados ao carregar
+            QMessageBox.critical(self, "Erro de Carregamento", f"Ocorreu um erro inesperado ao carregar as tarefas:\n{e}")
+            print(f"ERRO inesperado ao carregar tarefas: {e}")
 
 
 # --- Bloco Principal de Execução ---

@@ -1,10 +1,6 @@
 [
     {
-        "text": "abertura de damanda",
-        "completed": true
-    },
-    {
-        "text": "Tezte de sistema",
-        "completed": true
+        "text": "Abertura de chamado",
+        "completed": false
     }
 ]
