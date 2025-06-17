@@ -62,7 +62,7 @@ class PomodoroApp(QMainWindow):
         self.ui.btn_complete_task.clicked.connect(self.complete_task)
         self.ui.btn_remove_task.clicked.connect(self.remove_task)
 
-        # --- Lógica de Salvamento e Carregamento de Dados ---
+        # --- Lógica de Salvamento e Carregamento de Dados (Futuro) ---
         self.load_tasks()
 
 
@@ -114,7 +114,7 @@ class PomodoroApp(QMainWindow):
             self.timer.stop()
             self.is_running = False
             self.ui.btn_start_pause.setText("Iniciar")
-            self.play_sound_notification()
+            self.play_sound_notification() # Precisaremos implementar isso
 
             if self.is_pomodoro:
                 self.pomodoro_count += 1
